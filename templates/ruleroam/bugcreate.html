@@ -1,0 +1,211 @@
+
+<div class="layuimini-container layuimini-content-page">
+
+    <div class="layuimini-main">
+        <div class="layui-card-header">
+            需求编写
+        </div>
+
+        <form class="layui-form layuimini-form" id="myFormId" method="get" lay-filter="myFormFilter">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">需求名称</label>
+                <div class="layui-input-block">
+                    <label for="bug_name_Id"></label><input type="text" name="bug_name" id="bug_name_Id" lay-verify="required" lay-reqtext="需求名不能为空" placeholder="请输入需求名称" value="{{ request_data.bug_name }}" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">需求摘要</label>
+                <div class="layui-input-block">
+                    <textarea name="bug_digest" id="bug_digest_Id" class="layui-textarea" placeholder="请输入摘要信息">{{ request_data.bug_digest }}</textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                {# 这里是 forms 里自动生成的, 然后粘贴在这里的#}
+                <style type="text/css">
+                    .wmd-wrapper  ul {
+                        margin-left: 0px !important;
+                    }
+                    .wmd-wrapper ul li{
+                        list-style: disc !important;
+                    }
+                    .wmd-wrapper ul ul li{
+                        list-style: circle !important;
+                    }
+                    .wmd-wrapper h1,
+                    .wmd-wrapper h2,
+                    .wmd-wrapper h3,
+                    .wmd-wrapper h4,
+                    .wmd-wrapper h5,
+                    .wmd-wrapper h6 {
+                        background: #ffffff !important;
+                        color: #000000 !important;
+                    }
+                    .wmd-wrapper h2,
+                    .wmd-wrapper h3,
+                    .wmd-wrapper h4{
+                        padding: 0px !important;
+                    }
+                    .wmd-wrapper h5{
+                        letter-spacing: 0px !important;
+                        text-transform: none !important;
+                        font-size: 1em !important;
+                    }
+                    .wmd-wrapper h6{
+                        font-size: 1em !important;
+                        color: #777 !important;
+                    }
+                </style>
+                <link href="/static/mdeditor/css/editormd.css" type="text/css" media="all" rel="stylesheet">
+                <script src="/static/mdeditor/js/jquery.min.js"></script>
+                <script src="/static/mdeditor/js/editormd.min.js"></script>
+                <label class="layui-form-label">需求详情</label>
+                <div class="layui-input-block">
+                    <div class="wmd-wrapper"  id="id_bug_detail-wmd-wrapper">
+                        <textarea  cols="40" id="id_bug_detail" maxlength="65535" name="bug_detail" rows="10" required>{{ request_data.bug_detail }}</textarea>
+                    </div>
+                    <script type="text/javascript">
+                        {# 这里是 forms 里自动生成的, 然后粘贴在这里的#}
+                        $(function () {
+                            editormd("id_bug_detail-wmd-wrapper", {
+                                watch: true, // 关闭实时预览
+                                lineNumbers: false,
+                                lineWrapping: false,
+                                width: "100%",
+                                height: 500,
+                                placeholder: '',
+                                // 当有多个mdeditor时，全屏后，其他mdeditor仍然显示，解决此问题。
+                                onfullscreen : function() {
+                                    this.editor.css("border-radius", 0).css("z-index", 9999);
+                                },
+                                onfullscreenExit : function() {
+                                    this.editor.css({
+                                        zIndex : 10,
+                                        border : "1px solid rgb(221,221,221)"
+                                    })
+                                },
+                                syncScrolling: "single",
+                                path: "/static/mdeditor/js/lib/",
+                                // theme
+                                theme : "default",
+                                previewTheme : "default",
+                                editorTheme : "default",
+
+                                saveHTMLToTextarea: true, // editor.md 有问题没有测试成功
+                                toolbarAutoFixed: true,
+                                searchReplace: true,
+                                emoji: true,
+                                tex: true,
+                                taskList: false,
+                                flowChart: true,
+                                sequenceDiagram: true,
+
+                                // image upload
+                                imageUpload: true,
+                                imageFormats: ['jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF', 'png', 'PNG', 'bmp', 'BMP', 'webp', 'WEBP'],
+                                imageUploadURL: "/mdeditor/uploads/",
+                                toolbarIcons: function () {
+                                    return ['undo', 'redo', '|', 'bold', 'del', 'italic', 'quote', 'ucwords', 'uppercase', 'lowercase', '|', 'h1', 'h2', 'h3', 'h5', 'h6', '|', 'list-ul', 'list-ol', 'hr', '|', 'link', 'reference-link', 'image', 'code', 'preformatted-text', 'code-block', 'table', 'datetime', 'emoji', 'html-entities', 'pagebreak', 'goto-line', '|', 'help', 'info', '||', 'preview', 'watch', 'fullscreen']
+                                },
+                                onload: function () {
+                                    {#console.log('onload', this);#}
+                                    //this.fullscreen();
+                                    //this.unwatch();
+                                    //this.watch().fullscreen();
+
+                                    //this.setMarkdown("#PHP");
+                                    //this.width("100%");
+                                    //this.height(480);
+                                    //this.resize("100%", 640);
+                                }
+                            });
+
+                        });
+                    </script>
+                </div>
+            </div>
+
+
+            <div align="center" style="margin-top: 30px">
+                    <button class="layui-btn layui-btn-sm" id="saveBtnId" lay-submit lay-filter="saveBtn">发表文章</button>
+                    <a href="javascript:" class="layui-btn layui-btn-sm layui-btn-checked"  layuimini-content-href="ruleroam/bugs/">返回列表</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        if("{{ request_type }}" === "edit"){
+            //设置input 不可编辑有三种写法
+            {#$("#usernameId").attr("disabled", "disabled");#}
+            {#$("#usernameId").attr("onfocus", "this.blur()");#}
+            $("#bug_name_Id").attr("readonly", "true");
+            //设置input属性
+            $("#bug_name_Id").attr("style", "background-color: #e4e4e4; color:#000000;");
+        }
+
+        //监听提交
+        form.on('submit(saveBtn)', function (obj) {
+            $.ajax({
+                url: '/ruleroam/bugadd/',
+                type: 'post',
+                dataType: 'json', //预期返回类型
+                data: {"request_type": "{{ request_type }}", "request_data": JSON.stringify(obj.field).toString()},
+                success:function(data){
+                    if(data.status === "success"){
+                        layer.alert(data.msg,{ icon:1,title:'提示', btn:["查看", "取消"]},function(index){
+                            layer.closeAll();
+                            window.location.href = "/#/ruleroam/bugdetail/?bug_name=" + obj.field.bug_name
+                        });
+                    }else{
+                        layer.alert(data.msg,{ icon:2,title:'提示'},function(index){ layer.close(index);});
+                    }
+                },
+            });
+            return false;
+        });
+
+
+
+        {#layer.closeAll();#}
+        {#window.parent.location.reload(); //刷新父页面#}
+        {#table.reload('currentTableId');#}
+        {#history.back(-1)//直接返回当前页的上一页，数据全部消息，是个新页面#}
+        {#history.go(-1)//也是返回当前页的上一页，不过表单里的数据全部还在#}
+
+
+        {#//表单初始赋值#}
+        {#form.val('myFormFilter', {#}
+        {#    "departmentName": "运营与监控中心" // "name": "value"#}
+        {#    , "systemName": "测试系统"#}
+        {#    , "domainName": "www.test.com"#}
+        {#    , "SLBIP": "127.0.0.1"#}
+        {#    , "SLBPort": "8080"#}
+        {#    , "systemType": "APP应用系统"#}
+        {#    , "systemStatus": true#}
+        {#    , "accessURL": "url" //复选框选中状态#}
+        {#    , "developmentCompany": "科东"#}
+        {#    , "extranetAccess": true#}
+        {#    , "businessPeople": "businessPeople"#}
+        {#    , "businessPhone": "businessPhone"#}
+        {#    , "DevelopPeople": "DevelopPeople"#}
+        {#    , "DevelopPhone": "DevelopPhone"#}
+        {#    , "systemDescribe": "systemDescribe"#}
+        {#    , "systemUsername": "systemUsername"#}
+        {#    , "systemPassword": "systemPassword"})#}
+    });
+</script>

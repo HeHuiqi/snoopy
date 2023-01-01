@@ -1,0 +1,349 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+        <div class="layui-card-header">
+            部门管理
+        </div>
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+
+                <form class="layui-form" action="" id="searchformId">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline" style="width: 200px">
+                            <input type="text" name="name" placeholder="部门名称" value="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline" style="margin-left: 1px">
+                        <button id="search_Id" class="layui-btn layui-btn-primary" lay-submit lay-filter="search_Filter">
+                            <i class="layui-icon layui-icon-search"
+                               style="font-size: 18px; color: #555;"></i>
+                            查询
+                        </button>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </fieldset>
+
+
+        <table id="currentTableId" lay-filter="department_table_Filter"></table>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-primary layui-btn-sm data-add-btn" lay-event="add_department"> 添加部门 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-primary data-delete-btn" lay-event="department_batch_delete"> 批量删除 </button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm data-add-btn" data-refresh=""> 页面刷新 </button>
+
+            </div>
+        </script>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edituser">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+    </div>
+</div>
+
+
+{#添加按钮弹窗#}
+<div class="layuimini-main class-id-reset" id="add_department_OpenFormId" style="display: none">
+    <form class="layui-form layuimini-form" id="myFormId" method="get" lay-filter="myFormFilter" style="margin-top: 50px">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">部门名称</label>
+            <div class="layui-input-block" style="width: 85%">
+                <input type="text" name="department_name" id="department_name_Id" lay-verify="required" lay-reqtext="部门名称不能为空" placeholder="请输入部门名称" value="" class="layui-input">
+                <tip>填写要创建的部门名称。</tip>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述信息</label>
+            <div class="layui-input-block" style="width: 85%">
+                <textarea name="department_description" id="department_description_Id" class="layui-textarea" placeholder="请输入描述信息"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-sm" id="saveBtnId" lay-submit lay-filter="saveBtn">&nbsp;&nbsp;&nbsp;&nbsp;保存&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <button type="reset" class="layui-btn layui-btn-checked layui-btn-sm" id="resetBtnId" style="margin-left: 20px; margin-right: 20px"> &nbsp;&nbsp;&nbsp;&nbsp;重置&nbsp;&nbsp;&nbsp;&nbsp; </button>
+                <a class="layui-btn layui-btn-warm layui-btn-sm" onclick="layui.layer.closeAll()"> &nbsp;&nbsp;&nbsp;&nbsp;取消&nbsp;&nbsp;&nbsp;&nbsp; </a>
+
+            </div>
+        </div>
+
+
+    </form>
+
+</div>
+
+
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+        var add_edit_type = "init_data"
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/system/departmentlist/',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [[
+                {type: "checkbox", width: 50},
+                {field: 'department_name', minWidth: 200, title: '部门名称', sort: true, totalRowText: 'text', align:'left'},
+                {field: 'department_description', width: 200, title: '部门描述', sort: true, totalRowText: 'text', align:'left'},
+                {field: 'department_createtime', width: 250, title: '创建时间', sort: true, totalRowText: 'text', align:'left'},
+                {field: 'department_updatetime', width: 250, title: '修改时间', sort: true, totalRowText: 'text', align:'left'},
+                {title: '操作', width: 200, toolbar: '#currentTableBar', align: "center"}
+            ]],
+            limits: [50, 100, 500, 1000],
+            limit: 15,
+            page: true,
+            skin: 'line',
+            {#size: 'sm',#}
+            {#size: 'lg'#}
+        });
+
+        // 监听搜索操作
+        form.on('submit(search_Filter)', function (data) {
+            layer.load(2, {time: 100}); //又换了种风格，并且设定最长等待100毫秒
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                url: '/system/departmentsearch/'
+                ,method: 'post'
+                , page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: JSON.stringify(data.field),
+                }
+            }, 'data');
+            return false;
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(department_table_Filter)', function (obj) {
+            console.log(obj)
+        });
+
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.ajax({
+                url: '/system/departmentadd/',
+                type: 'post',
+                dataType: 'json', //预期返回类型
+                data: {"request_type": add_edit_type, "request_data": JSON.stringify(data.field).toString()},
+                success:function(data){
+                    if(data.status === "success"){
+                        layer.alert(data.msg,{ icon:1,title:'提示'},function(index){
+                            layer.closeAll();
+                            table.reload('currentTableId');
+                        });
+                    }else{
+                        layer.alert(data.msg,{ icon:2,title:'提示'},function(index){ layer.close(index);});
+                    }
+                },
+
+            });
+
+            return false;
+        });
+
+
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(department_table_Filter)', function (obj) {
+            if (obj.event === 'add_department') {   // 监听添加操作
+                add_edit_type = "create"
+                {#$(" #passwordId").val("");#}
+                {#$("input[type='email']").val("")#}
+
+                {#$('.class').val()#}
+                //设置input 不可编辑有三种写法
+                {#$("#usernameId").attr("disabled", false);#}
+                {#$("#ctyun_ninternalipdetailOpenFormId").attr("onfocus", "this.blur()");#}
+                {#$("#ctyun_ninternalipdetailOpenFormId").attr("readonly", "true");#}
+                //设置input属性
+                {#$("#usernameId").attr("style", "");#}
+                {#var content = miniPage.getHrefContent('/templates/system/table/add.html');#}
+                var openWH2 = miniPage.getOpenWidthHeight();
+                var index2 = layer.open({
+                    title: '添加部门',
+                    type: 1,
+                    shade: 0,
+                    maxmin:false,
+                    shadeClose: true,
+                    area: [openWH2[0] + 'px', openWH2[1] + 'px'],
+                    offset: [openWH2[2] + 'px', openWH2[3] + 'px'],
+                    content: $("#add_department_OpenFormId"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index2); });
+
+            } else if (obj.event === 'department_batch_delete') {  // 监听删除操作
+                var checkStatus = table.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+
+
+                if(JSON.stringify(data).toString() === "[]"){
+                    layer.alert("未选中任何数据");
+                }
+                else{
+                    var data_str="";
+                    data.forEach(function(obj){
+                        data_str = data_str + "</br>- "+ obj.department_name
+                    });
+
+                    layer.confirm('确认删除下列部门?' + data_str
+                    ,{
+                        icon:3
+                        , title:'提示'
+                    }
+                    , function (index) {
+                        $.ajax({
+                            url: '/system/departmentbatchdelete/',
+                            type: 'post',
+                            dataType: 'json',
+                            data: {
+                                data: JSON.stringify(data).toString()
+                            },
+                            success:function(data){
+                                if(data.status === "success"){
+                                    layer.alert(data.msg,{ icon:1,title:'提示'},function(index){
+                                        layer.closeAll();
+                                        table.reload('currentTableId');
+                                    });
+                                }else{
+                                    layer.alert(data.msg,{ icon:2,title:'提示'},function(i2){ layer.close(i2);});
+                                }
+                            },
+
+                        });
+                        layer.close(index);
+                    });
+                }
+            }
+
+        });
+
+
+
+        //行事件
+        table.on('tool(department_table_Filter)', function (obj) {
+            if (obj.event === 'edituser') {
+                add_edit_type = "edit"
+
+                $("#department_name_Id").val(obj.data.name);
+
+                //设置input 不可编辑有三种写法
+                {#$("#usernameId").attr("disabled", "disabled");#}
+                {#$("#usernameId").attr("onfocus", "this.blur()");#}
+                $("#department_name_Id").attr("readonly", "true");
+                //设置input属性
+                $("#department_name_Id").attr("style", "background-color: #e4e4e4; color:#000000;");
+                $("#resetBtnId").attr("style", "display: none");
+
+                {#var content = miniPage.getHrefContent('system/table/add.html');#}
+                var openWH = miniPage.getOpenWidthHeight();
+                var index = layer.open({
+                    title: '编辑部门名称',
+                    type: 1,
+                    shade: 0,
+                    maxmin:false,
+                    shadeClose: true,
+                    area: [openWH[0] + 'px', openWH[1] + 'px'],
+                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
+                    content: $("#add_department_OpenFormId"),
+                });
+
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+
+                //更新全部
+                form.render();
+
+                return false;
+            }
+            else if (obj.event === 'delete') {
+                layer.confirm('确认删除下列部门?</br>- ' + obj.data.department_name
+                ,{
+                    icon:3
+                    , title:'提示'
+                }
+                , function (index) {
+                    $.ajax({
+                        url: '/system/departmentdelete/',
+                        type: 'post',
+                        dataType: 'json',
+                        data: obj.data,
+                        success:function(data){
+                            if(data.status === "success"){
+                                layer.alert(data.msg,{ icon:1},function(index){
+                                    obj.del();
+                                    layer.closeAll();
+                                    table.reload('currentTableId');
+                                });
+                            }else{
+                                layer.alert(data.msg,{ icon:2},function(i2){ layer.close(i2);});
+                            }
+                        },
+
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+
+
+        {#layer.closeAll();#}
+        {#window.parent.location.reload(); //刷新父页面#}
+        {#table.reload('currentTableId');#}
+
+
+        {#//表单初始赋值#}
+        {#form.val('myFormFilter', {#}
+        {#    "departmentName": "运营与监控中心" // "name": "value"#}
+        {#    , "systemName": "测试系统"#}
+        {#    , "domainName": "www.test.com"#}
+        {#    , "SLBIP": "127.0.0.1"#}
+        {#    , "SLBPort": "8080"#}
+        {#    , "systemType": "APP应用系统"#}
+        {#    , "systemStatus": true#}
+        {#    , "accessURL": "url" //复选框选中状态#}
+        {#    , "developmentCompany": "科东"#}
+        {#    , "extranetAccess": true#}
+        {#    , "businessPeople": "businessPeople"#}
+        {#    , "businessPhone": "businessPhone"#}
+        {#    , "DevelopPeople": "DevelopPeople"#}
+        {#    , "DevelopPhone": "DevelopPhone"#}
+        {#    , "systemDescribe": "systemDescribe"#}
+        {#    , "systemUsername": "systemUsername"#}
+        {#    , "systemPassword": "systemPassword"})#}
+
+    });
+</script>

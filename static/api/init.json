@@ -1,0 +1,181 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "system/welcome1/"
+  },
+  "logoInfo": {
+    "title": "规则平台",
+    "image": "static/images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "数据总览",
+      "icon": "fa fa-area-chart",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "数据统计",
+          "href": "system/welcome1/",
+          "icon": "fa fa-line-chart",
+          "target": "_self"
+        },
+        {
+          "title": "主页二",
+          "href": "system/welcome2/",
+          "icon": "fa fa-pie-chart",
+          "target": "_self"
+        },
+        {
+          "title": "主页三",
+          "href": "system/welcome3/",
+          "icon": "fa fa-bar-chart",
+          "target": "_self"
+        }
+      ]
+    },
+
+    {
+      "title": "需求管理",
+      "icon": "fa fa-check-square-o",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "需求创建",
+          "href": "ruleroam/bugcreate/",
+          "icon": "fa fa-creative-commons",
+          "target": "_self"
+        }
+      ,{
+          "title": "需求管理",
+          "href": "ruleroam/bugs/",
+          "icon": "fa fa-creative-commons",
+          "target": "_self"
+        }
+      ]
+    },
+
+    {
+      "title": "规则管理",
+      "icon": "fa fa-tasks",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "漏洞创建",
+          "href": "ruleroam/vuln/",
+          "icon": "fa fa-creative-commons",
+          "target": "_self"
+        },
+        {
+          "title": "规则管理",
+          "href": "ruleroam/rule/",
+          "icon": "fa fa-creative-commons",
+          "target": "_self"
+        },
+
+        {
+          "title": "流转历史",
+          "href": "ruleroam/roamhistory/",
+          "icon": "fa fa-creative-commons",
+          "target": "_self"
+        },
+        {
+          "title": "历史规则",
+          "href": "ruleroam/historyrule/",
+          "icon": "fa fa-creative-commons",
+          "target": "_self"
+        },
+        {
+          "title": "规则编写",
+          "href": "qingteng/nhost/",
+          "icon": "fa fa-plus-square",
+          "target": "_self"
+        },
+        {
+          "title": "规则审批",
+          "href": "qingteng/whost/",
+          "icon": "fa fa-check-square-o",
+          "target": "_self"
+        },
+        {
+          "title": "规则列表",
+          "href": "qingteng/whost/",
+          "icon": "fa fa-navicon",
+          "target": "_self"
+        }
+      ]
+    },
+
+
+    {
+      "title": "规则测试",
+      "icon": "fa fa-check-square-o",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "测试平台",
+          "href": "portscanner/portscannerpage/",
+          "icon": "fa fa-paper-plane-o",
+          "target": "_self"
+        },
+        {
+          "title": "规则打包",
+          "href": "nessusscanner/nessusscannerpage/",
+          "icon": "fa fa-file-archive-o",
+          "target": "_self"
+        }
+      ]
+    },
+
+    {
+      "title": "用户管理",
+      "href": "",
+      "icon": "fa fa-address-book-o",
+      "target": "",
+      "child": [
+        {
+          "title": "部门管理",
+          "href": "system/department/",
+          "icon": "fa fa-address-card",
+          "target": "_self"
+        },
+        {
+          "title": "用户管理",
+          "href": "system/user/",
+          "icon": "fa fa-user",
+          "target": "_self"
+        },
+        {
+          "title": "登录日志",
+          "href": "system/loginhistory/",
+          "icon": "fa fa-tachometer",
+          "target": "_self"
+        }
+      ]
+    },
+    {
+      "title": "系统信息",
+      "href": "",
+      "icon": "fa fa-cogs",
+      "target": "",
+      "child": [
+
+        {
+          "title": "参数设置",
+          "href": "system/loginhistory/",
+          "icon": "fa fa-cog",
+          "target": "_self"
+        },{
+          "title": "系统日志",
+          "href": "system/loginhistory/",
+          "icon": "fa fa-tachometer",
+          "target": "_self"
+        }
+      ]
+    }
+  ]
+}

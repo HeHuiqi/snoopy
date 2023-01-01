@@ -1,0 +1,81 @@
+<div class="layuimini-container layuimini-content-page">
+
+    <fieldset class="layuimini-main">
+        <div class="layui-card-header">
+            查看详情
+{#            <a href="javascript:" layuimini-content-href="ruleroam/bugs/"></a>#}
+
+        </div>
+        <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/static/mdeditor/css/markdown_emacs.css">
+        <div style="margin-left: 100px">
+            {{ bug_detail | safe }}
+        </div>
+
+        <div align="center">
+            <a href="javascript:" class="layui-btn layui-btn-sm layui-btn-checked"  layuimini-content-href="ruleroam/bugs/">返回列表</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.ajax({
+                url: '/ruleroam/bugadd/',
+                type: 'post',
+                dataType: 'json', //预期返回类型
+                data: {"request_type": "{{ request_type }}", "request_data": JSON.stringify(data.field).toString()},
+                success:function(data){
+                    if(data.status === "success"){
+                        layer.alert(data.msg,{ icon:1,title:'提示'},function(index){
+                            layer.closeAll();
+                            table.reload('currentTableId');
+                        });
+                    }else{
+                        layer.alert(data.msg,{ icon:2,title:'提示'},function(index){ layer.close(index);});
+                    }
+                },
+            });
+            return false;
+        });
+
+
+        {#layer.closeAll();#}
+        {#window.parent.location.reload(); //刷新父页面#}
+        {#table.reload('currentTableId');#}
+
+
+        {#//表单初始赋值#}
+        {#form.val('myFormFilter', {#}
+        {#    "departmentName": "运营与监控中心" // "name": "value"#}
+        {#    , "systemName": "测试系统"#}
+        {#    , "domainName": "www.test.com"#}
+        {#    , "SLBIP": "127.0.0.1"#}
+        {#    , "SLBPort": "8080"#}
+        {#    , "systemType": "APP应用系统"#}
+        {#    , "systemStatus": true#}
+        {#    , "accessURL": "url" //复选框选中状态#}
+        {#    , "developmentCompany": "科东"#}
+        {#    , "extranetAccess": true#}
+        {#    , "businessPeople": "businessPeople"#}
+        {#    , "businessPhone": "businessPhone"#}
+        {#    , "DevelopPeople": "DevelopPeople"#}
+        {#    , "DevelopPhone": "DevelopPhone"#}
+        {#    , "systemDescribe": "systemDescribe"#}
+        {#    , "systemUsername": "systemUsername"#}
+        {#    , "systemPassword": "systemPassword"})#}
+    });
+</script>
