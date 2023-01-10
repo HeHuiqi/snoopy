@@ -6,7 +6,7 @@
 ## 创建超级管理用户
 ```
 # username:admin
-python3 manage.py 
+ python3 manage.py createsuperuser
 ```
 
 ## 测试

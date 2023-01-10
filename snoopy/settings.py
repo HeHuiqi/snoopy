@@ -175,6 +175,7 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 FILE_NAME_NOT_USE_CHAR = ['?','*',':','"','<','>','\\','/','|', ' ']
 
+# markdown 默认配置
 MD_DEFAULT_CONFIG = {
     'width': '100%',
     'height': 500,

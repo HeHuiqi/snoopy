@@ -466,7 +466,6 @@ def get_bug_list(bug_obj, request, method):
 @csrf_exempt
 def buglist(request):
     bug_obj = BugManage.objects.all()
-    print('bug_obj:',bug_obj[0].bug_name)
     data_list = get_bug_list(bug_obj, request, "GET")
     option_status = "success"
     option_msg = "需求列表加载成功"
